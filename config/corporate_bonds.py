@@ -1,0 +1,7 @@
+FRED_SERIES = {
+    "AAA": "BAMLC0A1CAAAEY",
+    "BBB": "BAMLC0A4CBBBEY",
+    "CCC": "BAMLH0A3HYCEY",
+}
+
+ETF_TICKERS = ["TLT", "SHY", "LQD", "JNK", "HYG"]

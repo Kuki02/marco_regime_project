@@ -1,0 +1,133 @@
+# ==========================================
+# 0. PROJECT-SPECIFIC EXCLUSIONS
+# ==========================================
+
+Project setup.docx
+
+
+# ==========================================
+# 1. PYTHON CACHE / BUILD FILES
+# ==========================================
+
+__pycache__/        # Python bytecode cache (auto-generated)
+*.pyc               # Compiled Python files
+
+
+# ==========================================
+# 2. VIRTUAL ENVIRONMENTS
+# ==========================================
+
+.venv/              # Local virtual environment (your packages)
+venv/               # Alternative naming
+env/                # Another common naming
+                    # These are machine-specific → never commit
+
+
+# ==========================================
+# 3. ENVIRONMENT VARIABLES (CRITICAL)
+# ==========================================
+
+.env                # API keys, secrets, credentials
+.env.*              # Variants like .env.dev, .env.prod
+                    # NEVER upload → security risk
+
+
+# ==========================================
+# 4. DATA FILES (VERY IMPORTANT FOR YOU)
+# ==========================================
+
+data/               # Raw data (CSV, Excel, downloads)
+outputs/            # Generated outputs (processed data)
+reports/            # Reports, exports
+
+*.csv               # CSV datasets
+*.xlsx              # Excel files
+*.xls               # Older Excel files
+
+*.parquet           # Efficient data format (can get large)
+*.json              # JSON data dumps
+
+                    # Why ignore:
+                    # - large files
+                    # - constantly changing
+                    # - not source code
+
+
+# ==========================================
+# 5. JUPYTER NOTEBOOKS
+# ==========================================
+
+.ipynb_checkpoints/ # Auto-saves from Jupyter
+
+
+# ==========================================
+# 6. LOGS & TEMP FILES
+# ==========================================
+
+*.log               # Script logs
+*.tmp               # Temporary files
+
+
+# ==========================================
+# 7. OS FILES
+# ==========================================
+
+.DS_Store           # macOS junk file
+Thumbs.db           # Windows image cache
+
+
+# ==========================================
+# 8. EDITOR SETTINGS
+# ==========================================
+
+.vscode/            # VS Code settings (optional)
+.idea/              # PyCharm settings
+
+                    # Ignore if working solo
+                    # Keep if you want shared team config
+
+
+# ==========================================
+# 9. LARGE FILE PROTECTION (SMART ADDITION)
+# ==========================================
+
+*.zip               # Archives
+*.tar               # Compressed files
+*.gz
+
+                    # Prevents accidental uploads of big files# Python cache
+__pycache__/
+*.pyc
+
+# Virtual env
+.venv/
+venv/
+
+# Secrets
+.env
+
+# Data (your case)
+data/
+outputs/
+
+# Excel files (important for you)
+*.xlsx
+*.csv
+
+# Notebooks temp
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+
+# ==========================================
+# 10. OPTIONAL: NOTEBOOKS (your choice)
+# ==========================================
+
+# *.ipynb           # Uncomment if you DON'T want notebooks in Git
+                    # Usually you DO want them → keep commented
