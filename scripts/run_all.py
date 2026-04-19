@@ -16,18 +16,25 @@ PARALLEL_SCRIPTS = [
 SEQUENTIAL_SCRIPTS: list[str] = []
 
 
+SCRIPT_TIMEOUT = 3600  # 1 hour per script
+
+
 def run_script(path: str) -> tuple[str, int, str]:
     env = os.environ.copy()
     env["PYTHONPATH"] = str(PROJECT_ROOT)
-    result = subprocess.run(
-        [sys.executable, path],
-        capture_output=True,
-        text=True,
-        cwd=PROJECT_ROOT,
-        env=env,
-    )
-    output = result.stdout + result.stderr
-    return path, result.returncode, output
+    try:
+        result = subprocess.run(
+            [sys.executable, path],
+            capture_output=True,
+            text=True,
+            cwd=PROJECT_ROOT,
+            env=env,
+            timeout=SCRIPT_TIMEOUT,
+        )
+        output = result.stdout + result.stderr
+        return path, result.returncode, output
+    except subprocess.TimeoutExpired:
+        return path, -1, f"TIMED OUT after {SCRIPT_TIMEOUT}s"
 
 
 def main():

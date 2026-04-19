@@ -134,7 +134,8 @@ def load_existing_data():
         df = df.sort_index()
         return df
 
-    except Exception:
+    except Exception as e:
+        print(f"Warning: could not load existing data from {OUTPUT_FILE}: {e}")
         return pd.DataFrame()
 
 

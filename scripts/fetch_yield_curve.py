@@ -1,9 +1,14 @@
+from io import StringIO
 from pathlib import Path
+import time
 import pandas as pd
+import requests
 from openpyxl import load_workbook
 
-from config.series import TREASURY_PAGES
 from config.series import TREASURY_PAGES, TARGET_COLUMNS
+
+TIMEOUT = 30
+MAX_RETRIES = 3
 
 
 WORKBOOK_PATH = Path(__file__).resolve().parent.parent / "data" / "master" / "US Yields.xlsx"
@@ -32,10 +37,17 @@ def get_last_date_from_sheet(workbook_path: Path, sheet_name: str = "Data") -> p
 
 
 def fetch_treasury_table(url: str) -> pd.DataFrame:
-    """
-    Read the Treasury HTML table from the live page.
-    """
-    tables = pd.read_html(url, flavor="html5lib")
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            response = requests.get(url, timeout=TIMEOUT)
+            response.raise_for_status()
+            tables = pd.read_html(StringIO(response.text), flavor="html5lib")
+            break
+        except Exception as e:
+            if attempt == MAX_RETRIES:
+                raise RuntimeError(f"Failed to fetch {url} after {MAX_RETRIES} attempts: {e}") from e
+            print(f"Attempt {attempt} failed: {e}. Retrying...")
+            time.sleep(2 ** attempt)
 
     if not tables:
         raise ValueError(f"No table found at {url}")

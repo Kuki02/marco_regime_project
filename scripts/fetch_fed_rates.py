@@ -1,12 +1,28 @@
 from pathlib import Path
+import time
 import pandas as pd
+import requests
 
 FRED_URL = "https://fred.stlouisfed.org/graph/fredgraph.csv?id=FEDFUNDS"
 OUTPUT_PATH = Path("data/raw/fed_rates/fed_funds_rate.csv")
+TIMEOUT = 30
+MAX_RETRIES = 3
 
 
 def fetch_fed_funds_rate() -> pd.DataFrame:
-    df = pd.read_csv(FRED_URL)
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            response = requests.get(FRED_URL, timeout=TIMEOUT)
+            response.raise_for_status()
+            break
+        except Exception as e:
+            if attempt == MAX_RETRIES:
+                raise RuntimeError(f"Failed to fetch FRED data after {MAX_RETRIES} attempts: {e}") from e
+            print(f"Attempt {attempt} failed: {e}. Retrying...")
+            time.sleep(2 ** attempt)
+
+    from io import StringIO
+    df = pd.read_csv(StringIO(response.text))
     df.columns = ["Date", "fed_funds_rate"]
     df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
     df["fed_funds_rate"] = pd.to_numeric(df["fed_funds_rate"], errors="coerce")
